@@ -1,0 +1,40 @@
+
+<header class="navbar navbar-expand-lg navbar-light bg-light">
+    <h1 class="navbar-brand">Dashboard</h1>
+
+    <div class="container p-2">
+        <a class="btn btn-primary" href="/new">New Note</a>
+        <a class="btn btn-secondary" href="/logout">Log out</a>
+    </div>
+
+    <div class="container" style="max-width: 60px; max-height: 40px; overflow: hidden;">
+        <p>{{user.displayName}}</p>
+        <div class="rounded-circle" style="transform: scale(0.2, 0.2);"><img src="{{user.profilePicture}}" alt="img"></div>
+    </div>
+    
+</header>
+
+<div class="d-flex flex-column-reverse ">
+    {{#if notes}}
+
+        {{#each notes}}
+        <div class="container border mt-4 p-3 rounded">
+            
+                <h1 class="h2 mb-2">{{title}}</h1>
+                
+            <span class="text-muted mb-2">{{formatDate createdAt 'MMMM Do YYYY, h:mm a'}}</span>
+            <p class="mt-2 mb-3 h5">{{text}}</p>
+
+            <form action="dashboard/delete/{{_id}}" method="POST" id="delete-form">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+        {{/each}}
+
+    {{else}}
+        <p>It seems that you do not have any notes yet.</p>
+    {{/if}}
+</div>
+
+
