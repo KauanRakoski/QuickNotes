@@ -14,7 +14,7 @@ passport.deserializeUser(function(user, done){
 passport.use(new GoogleStrategy({
         clientID: config.get('clientID'),
         clientSecret: config.get("clientSecret"),
-        callbackURL: 'https://quick-notesjs.herokuapp.com/google/callback'
+        callbackURL: 'http://localhost:3030/google/callback'
     },
     async (acessToken, refreshToken, profile, done) => {
         const newUser = {

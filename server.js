@@ -7,6 +7,9 @@ const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 const cors = require('cors');
 
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const flash = require('connect-flash')
 const methodOverride = require('method-override');
 const passport = require('passport')
 const path = require('path');
@@ -20,10 +23,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 const PORT = process.env.PORT || 3030;
 
 // ? Configuration
-app.use(cookieSession({
+app.use(flash());
+
+/* app.use(cookieSession({
     name: 'quick-notes',
     keys: ['supersecretcode', 'supercodesecret']
-}));
+})); */
+
+
 /* 
     ! CORE config
     ! DESKTOP
@@ -43,6 +50,14 @@ mongoose.connect(db, {
 .then(() => console.log('Database connection established'))
 .catch((e) => console.log('Database connection denied'));
 
+app.use(
+    session({
+      secret: 'keyboard cat',
+      resave: false,
+      saveUninitialized: false,
+      store: new MongoStore({ mongooseConnection: mongoose.connection }),
+    })
+  );
 // ? Handlebars helpers
 const { formatDate} = require('./helpers/hbshelper');
 
@@ -86,14 +101,18 @@ app.get('/', (req, res) => {
     res.render('slash', {title:'Quick Notes'});
 });
 
+app.get('/flash', ensureAuth, (req, res) => {
+    req.flash('sucess', 'You are logged in');
+    res.redirect('/dashboard')
+})
+
 // ? dashboard route
 app.get('/dashboard', ensureAuth, async(req, res) =>{
     try{
-        
         const user = await User.findOne({ googleID: req.user.googleID }).lean();
         const notes = await Note.find({ creator: req.user.id }).lean();
 
-        res.render('home', {notes: notes, user: user, title:'Dashboard'})
+        res.render('home', {notes: notes, user: user, title:'Dashboard', messages: req.flash('sucess')})
     }
     catch(err){
         res.send(err);
@@ -111,6 +130,7 @@ app.post('/note', ensureAuth, async (req, res) => {
     const text = req.body.text;
 
     await Note.create({
+        user: req.user,
         title: title,
         text: text,
     });
@@ -176,7 +196,8 @@ app.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/failure' }),
   function(req, res) {
       try{
-        res.redirect('/dashboard');
+        res.redirect('/flash');
+        
       }
       catch(err){
           res.send(err)
