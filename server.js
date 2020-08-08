@@ -95,7 +95,7 @@ app.get('/dashboard', ensureAuth, async(req, res) =>{
         res.render('home', {notes: notes, user: user, title:'Dashboard'})
     }
     catch(err){
-        console.error(err);
+        res.send(err);
     } 
 });
 
@@ -105,7 +105,7 @@ app.get('/new', ensureAuth, (req, res) => {
 });
 
 // ? Post new note route 
-app.post('/note', async (req, res) => {
+app.post('/note', ensureAuth, async (req, res) => {
     const title = req.body.title;
     const text = req.body.text;
 
@@ -124,7 +124,7 @@ app.delete('/dashboard/delete/:id', ensureAuth, async (req, res) => {
         res.redirect('/dashboard');
     }
     catch(err){
-        console.error(err);
+        res.send(err);
     }
 });
 
@@ -149,7 +149,7 @@ app.put('/saveedit/:id', ensureAuth, async (req, res) => {
         res.redirect('/dashboard');
     }
     catch(e){
-
+        res.send(e)
     }
 })
 
@@ -178,7 +178,7 @@ app.get('/google/callback',
         res.redirect('/dashboard');
       }
       catch(err){
-          console.log(err)
+          res.send(err)
       }
    
   });
