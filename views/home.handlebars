@@ -1,20 +1,21 @@
 
-<header class="navbar navbar-expand-lg navbar-light bg-light">
+<header class="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-around fixed-top">
     <h1 class="navbar-brand">Dashboard</h1>
 
-    <div class="container p-2">
-        <a class="btn btn-primary" href="/new">New Note</a>
+    <div class="d-flex" >
+        <p class="h5 text-muted">{{user.displayName}}</p>
+    </div>
+
+    <div class="d-flex">
+        <a class="btn btn-primary mr-2" href="/new">New Note</a>
         <a class="btn btn-secondary" href="/logout">Log out</a>
     </div>
 
-    <div class="container" style="max-width: 60px; max-height: 40px; overflow: hidden;">
-        <p>{{user.displayName}}</p>
-        <div class="rounded-circle" style="transform: scale(0.2, 0.2);"><img src="{{user.profilePicture}}" alt="img"></div>
-    </div>
+    
     
 </header>
 
-<div class="d-flex flex-column-reverse ">
+<div class="d-flex flex-column-reverse mt-5 pt-3">
     {{#if notes}}
 
         {{#each notes}}
@@ -25,15 +26,18 @@
             <span class="text-muted mb-2">{{formatDate createdAt 'MMMM Do YYYY, h:mm a'}}</span>
             <p class="mt-2 mb-3 h5">{{text}}</p>
 
-            <form action="dashboard/delete/{{_id}}" method="POST" id="delete-form">
-                    <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
+            <div class="d-flex">
+                <a class="btn btn-primary mr-2 pr-3 pl-3" href="/edit/{{_id}}">Edit</a>
+                <form action="dashboard/delete/{{_id}}" method="POST" id="delete-form">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
         </div>
         {{/each}}
 
     {{else}}
-        <p>It seems that you do not have any notes yet.</p>
+        <p class="h4 text-center text-muted mt-5 pt-5">It seems that you do not have any notes yet...</p>
     {{/if}}
 </div>
 

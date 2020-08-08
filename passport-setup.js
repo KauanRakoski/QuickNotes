@@ -23,7 +23,7 @@ passport.use(new GoogleStrategy({
             profilePicture: profile.photos[0].value,
         }
         try{
-            let user = await Model.findOne({googleID: profile.ID});
+            let user = await Model.findOne({googleID: profile.id});
 
             if(user) done(null, user);
             

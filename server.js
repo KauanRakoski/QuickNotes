@@ -44,10 +44,10 @@ mongoose.connect(db, {
 .catch((e) => console.log('Database connection denied'));
 
 // ? Handlebars helpers
-const { formatDate } = require('./helpers/hbshelper');
+const { formatDate} = require('./helpers/hbshelper');
 
 // ? Handlebars middleware
-app.engine('handlebars', exphbs({helpers: { formatDate, }, defaultLayout: 'layout'}));
+app.engine('handlebars', exphbs({helpers: { formatDate}, defaultLayout: 'layout'}));
 app.set('view engine', 'handlebars');
 
 // ? bodyParser middleware
@@ -90,7 +90,7 @@ app.get('/', (req, res) => {
 app.get('/dashboard', ensureAuth, async(req, res) =>{
     try{
         const notes = await Note.find({ creator: req.user.id }).lean();
-        const user = await User.find({ googleID: req.user.googleID }).lean();
+        const user = await User.findOne({ googleID: req.user.googleID }).lean();
 
         res.render('home', {notes: notes, user: user, title:'Dashboard'})
     }
@@ -128,6 +128,31 @@ app.delete('/dashboard/delete/:id', ensureAuth, async (req, res) => {
     }
 });
 
+app.get('/edit/:id', ensureAuth, async(req, res) => {
+    try{
+        let note_id = req.params.id;
+
+        let editNote = await Note.findOne({_id: note_id}).lean();
+        res.render('edit', {note: editNote, title: 'Edit Note'}) 
+    }
+    catch(e){
+        res.send(e);
+    }    
+});
+
+app.put('/saveedit/:id', ensureAuth, async (req, res) => {
+    try{
+        let noteId = req.params.id;
+        
+
+        await Note.findOneAndUpdate({_id: noteId}, {title: req.body.editTitle, text: req.body.editText});
+        res.redirect('/dashboard');
+    }
+    catch(e){
+
+    }
+})
+
 // ? Logout route
 app.get('/logout', (req, res) => {
     req.session = null;
@@ -138,7 +163,7 @@ app.get('/logout', (req, res) => {
 // ? Failure Route
 app.get('/failure', (req, res) => {
     res.send('Oauth login failed.')
-})
+});
 
 // ! Oauth routes
 
