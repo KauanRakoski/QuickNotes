@@ -89,8 +89,9 @@ app.get('/', (req, res) => {
 // ? dashboard route
 app.get('/dashboard', ensureAuth, async(req, res) =>{
     try{
-        const notes = await Note.find({ creator: req.user }).lean();
+        
         const user = await User.findOne({ googleID: req.user.googleID }).lean();
+        const notes = await Note.find({ creator: req.user.id }).lean();
 
         res.render('home', {notes: notes, user: user, title:'Dashboard'})
     }
