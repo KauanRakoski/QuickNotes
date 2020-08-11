@@ -25,6 +25,8 @@ const PORT = process.env.PORT || 3030;
 // ? Configuration
 app.use(flash());
 
+
+
 /* app.use(cookieSession({
     name: 'quick-notes',
     keys: ['supersecretcode', 'supercodesecret']
@@ -50,14 +52,16 @@ mongoose.connect(db, {
 .then(() => console.log('Database connection established'))
 .catch((e) => console.log('Database connection denied'));
 
+// ? session middleware
 app.use(
     session({
       secret: 'keyboard cat',
       resave: false,
       saveUninitialized: false,
-      store: new MongoStore({ mongooseConnection: mongoose.connection }),
+      store: new MongoStore({ mongooseConnection: mongoose.connection })
     })
   );
+
 // ? Handlebars helpers
 const { formatDate} = require('./helpers/hbshelper');
 
