@@ -9,7 +9,7 @@ module.exports = function(passport){
     passport.use(new GoogleStrategy({
         clientID: config.get('clientID'),
         clientSecret: config.get("clientSecret"),
-        callbackURL: 'http://quick-notesjs.herokuapp.com/google/callback'
+        callbackURL: 'https://quick-notesjs.herokuapp.com/google/callback'
     },
     async (acessToken, refreshToken, profile, done) => {
         const newUser = {
