@@ -15,7 +15,7 @@ const passport = require('passport')
 const path = require('path');
 const app = express();
 
-require('./passport-setup')
+require('./passport-setup')(passport);
 
 // ! Not core config
 app.use(cors());
@@ -106,14 +106,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/flash', ensureAuth, (req, res) => {
-    req.flash('sucess', 'You are logged in');
+    req.flash('sucess', 'You are logged in!');
     res.redirect('/dashboard')
 })
 
 // ? dashboard route
 app.get('/dashboard', ensureAuth, async(req, res) =>{
     try{
-        const user = await User.findOne({ googleID: req.user.googleID }).lean();
+        const user = await User.findOne({ _id: req.user.id }).lean();
         const notes = await Note.find({ creator: req.user.id }).lean();
 
         res.render('home', {notes: notes, user: user, title:'Dashboard', messages: req.flash('sucess')})
@@ -134,7 +134,7 @@ app.post('/note', ensureAuth, async (req, res) => {
     const text = req.body.text;
 
     await Note.create({
-        user: req.user,
+        creator: req.user.id,
         title: title,
         text: text,
     });

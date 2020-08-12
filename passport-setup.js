@@ -1,20 +1,15 @@
-const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const config = require('config');
+
 const Model = require('./models/user')
 
-passport.serializeUser(function(user, done){
-    done(null, user);
-});
 
-passport.deserializeUser(function(user, done){
-    done(null, user);
-})
 
-passport.use(new GoogleStrategy({
+module.exports = function(passport){
+    passport.use(new GoogleStrategy({
         clientID: config.get('clientID'),
         clientSecret: config.get("clientSecret"),
-        callbackURL: 'https://quick-notesjs.herokuapp.com/google/callback'
+        callbackURL: 'http://quick-notesjs.herokuapp.com/google/callback'
     },
     async (acessToken, refreshToken, profile, done) => {
         const newUser = {
@@ -34,7 +29,14 @@ passport.use(new GoogleStrategy({
         }
         catch(err){
             res.send(err);
-        }
-            /* return done(null, profile); */
-        }
+        }}
 ));
+    passport.serializeUser(function(user, done){
+        done(null, user.id);
+    });
+
+    passport.deserializeUser((id, done) => {
+        Model.findById(id, (err, user) => done(err, user));
+    })
+}
+
