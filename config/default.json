@@ -1,5 +1,3 @@
 {
-    "mongoURI": "mongodb+srv://root:quicknotesroot@notes.saqui.mongodb.net/<notes>?retryWrites=true&w=majority",
-    "clientID": "619389280259-8lglh7ujdfqdd55aga3l1ktkksq93tjk.apps.googleusercontent.com",
-    "clientSecret": "2t5AqG_rsty1_VUPeIpxfrBs"
+    
 }
