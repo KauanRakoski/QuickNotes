@@ -5,11 +5,11 @@
     <input type="hidden" name="_method" value="PUT">
 
     <div class="form-group">
-        <label for="title">Title:</label>
+        <label for="editTitle">Title:</label>
         <input class="form-control" type="text" value="{{note.title}}" name="editTitle">
         
-        <label for="text">Notes</label>
-        <textarea class="form-control" rows="3" id="editor" name="editText">{{note.text}}</textarea>
+        <label for="editText">Notes</label>
+        <textarea class="form-control" rows="10" id="editor" name="editText">{{note.text}}</textarea>
     </div>
 
     <button class="btn btn-primary m-auto" type="submit">Save edit</button>

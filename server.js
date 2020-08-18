@@ -27,10 +27,6 @@ app.use(flash());
 
 
 
-/* app.use(cookieSession({
-    name: 'quick-notes',
-    keys: ['supersecretcode', 'supercodesecret']
-})); */
 
 
 /* 
@@ -47,7 +43,8 @@ mongoose.connect(db, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false, 
-    useCreateIndex: false,
+    useCreateIndex: true,
+    
 })
 .then(() => console.log('Database connection established'))
 .catch((e) => console.log('Database connection denied'));
@@ -70,8 +67,8 @@ app.engine('handlebars', exphbs({helpers: { formatDate}, defaultLayout: 'layout'
 app.set('view engine', 'handlebars');
 
 // ? bodyParser middleware
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(bodyParser.json());
+app.use(express.urlencoded({extended: false}));
+app.use(express.json());
 
 // ? Passport middleware
 app.use(passport.initialize());
@@ -102,7 +99,13 @@ const ensureAuth = (req, res, next) => {
 
 // ? Landing route
 app.get('/', (req, res) => {
-    res.render('slash', {title:'Quick Notes'});
+    try{
+        res.render('slash', {title:'Quick Notes'});
+    }
+    catch(err){
+        res.render('slash', {title:'Quick Notes', error:err});
+    }
+    
 });
 
 app.get('/flash', ensureAuth, (req, res) => {
@@ -119,7 +122,7 @@ app.get('/dashboard', ensureAuth, async(req, res) =>{
         res.render('home', {notes: notes, user: user, title:'Dashboard', messages: req.flash('sucess')})
     }
     catch(err){
-        res.send(err);
+        res.render('error', {title: 'Quick Notes | error', error: e})
     } 
 });
 
@@ -133,13 +136,19 @@ app.post('/note', ensureAuth, async (req, res) => {
     const title = req.body.title;
     const text = req.body.text;
 
-    await Note.create({
-        creator: req.user.id,
-        title: title,
-        text: text,
-    });
-
-    res.redirect('/dashboard')
+    try{
+        await Note.create({
+            creator: req.user.id,
+            title: title,
+            text: text,
+        });
+    
+        res.redirect('/dashboard')
+    }
+    catch(err) {
+        res.render('error', {title: 'Quick Notes | error', error: err})
+    }
+    
 });
 
 // ? Delete Note Route
@@ -149,11 +158,11 @@ app.delete('/dashboard/delete/:id', ensureAuth, async (req, res) => {
         res.redirect('/dashboard');
     }
     catch(err){
-        res.send(err);
+        res.render('error', {title: 'Quick Notes | error', error: err})
     }
 });
 
-app.get('/edit/:id', ensureAuth, async(req, res) => {
+app.get('/edit/:slug/:id', ensureAuth, async(req, res) => {
     try{
         let note_id = req.params.id;
 
@@ -161,26 +170,29 @@ app.get('/edit/:id', ensureAuth, async(req, res) => {
         res.render('edit', {note: editNote, title: 'Edit Note'}) 
     }
     catch(e){
-        res.send(e);
+        res.render('error', {title: 'Quick Notes | error', error: e})
     }    
 });
 
 app.put('/saveedit/:id', ensureAuth, async (req, res) => {
     try{
         let noteId = req.params.id;
-        
+        let note = await Note.findById(noteId);
 
-        await Note.findOneAndUpdate({_id: noteId}, {title: req.body.editTitle, text: req.body.editText});
+        note.title = req.body.editTitle;
+        note.text = req.body.editText;
+
+        await note.save()
+
         res.redirect('/dashboard');
     }
     catch(e){
-        res.send(e)
+        res.render('error', {title: 'Quick Notes | error', error: e})
     }
 })
 
 // ? Logout route
 app.get('/logout', (req, res) => {
-    req.session = null;
     req.logout();
     res.redirect('/');
 })
