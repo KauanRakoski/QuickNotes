@@ -3,8 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const config = require('config');
 const exphbs = require('express-handlebars');
-const bodyParser = require('body-parser');
-const cookieSession = require('cookie-session');
+
 const cors = require('cors');
 
 const session = require('express-session');
@@ -24,10 +23,6 @@ const PORT = process.env.PORT || 3030;
 
 // ? Configuration
 app.use(flash());
-
-
-
-
 
 /* 
     ! CORE config
@@ -60,7 +55,7 @@ app.use(
   );
 
 // ? Handlebars helpers
-const { formatDate} = require('./helpers/hbshelper');
+const { formatDate } = require('./helpers/hbshelper');
 
 // ? Handlebars middleware
 app.engine('handlebars', exphbs({helpers: { formatDate}, defaultLayout: 'layout'}));
@@ -91,7 +86,7 @@ const ensureAuth = (req, res, next) => {
     if(req.user){
         next()
     }else{
-        res.sendStatus(401)
+        res.render('error', {title:'Quick Notes | login', error: "You are not logged in."})
     }
 }
 
@@ -127,19 +122,15 @@ app.get('/dashboard', ensureAuth, async(req, res) =>{
 });
 
 // ? new note route
-app.get('/new', ensureAuth, (req, res) => {
-    res.render('add', {title: 'New Note'})
-});
+
 
 // ? Post new note route 
 app.post('/note', ensureAuth, async (req, res) => {
-    const title = req.body.title;
     const text = req.body.text;
 
     try{
         await Note.create({
             creator: req.user.id,
-            title: title,
             text: text,
         });
     
@@ -162,7 +153,7 @@ app.delete('/dashboard/delete/:id', ensureAuth, async (req, res) => {
     }
 });
 
-app.get('/edit/:slug/:id', ensureAuth, async(req, res) => {
+app.get('/edit/:id', ensureAuth, async(req, res) => {
     try{
         let note_id = req.params.id;
 
@@ -179,7 +170,6 @@ app.put('/saveedit/:id', ensureAuth, async (req, res) => {
         let noteId = req.params.id;
         let note = await Note.findById(noteId);
 
-        note.title = req.body.editTitle;
         note.text = req.body.editText;
 
         await note.save()
@@ -205,7 +195,7 @@ app.get('/failure', (req, res) => {
 // ! Oauth routes
 
 // ? Oauth route
-app.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+app.get('/google', passport.authenticate('google', { scope: ['profile'] }));
 
 //? oAuth callback route
 app.get('/google/callback', 

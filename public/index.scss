@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+body{
+    overflow-x: hidden;
+}
+#note-form{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+#note-input{
+    transition: all 300ms ease-in-out;
+
+    width: 630px;
+    height: 50px;
+    margin: 80px auto 10px;
+    box-shadow: 2px 2px 3px #D1D5DA, -1px -1px 3px #D1D5DA;
+    padding: 0.7em;
+    border-radius: 5px;
+    scrollbar-color: transparent;
+    border: 1px solid #D1D5DA;
+    resize: none;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+#newbtn{
+    color: #505152;
+    background: none;
+    cursor: pointer;
+    border: none;
+
+    position: absolute !important;
+    top: 93px;
+    right: 478px;
+}
+#note-input:focus {
+    
+    height: 200px;
+}
+
+#note-input::-webkit-scrollbar {
+    display: none;
+}
+
+.note-card-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+}
+.note-card{
+    margin-top: 10px;
+    border: 1px solid #D1D5DA;
+    width: 630px;
+    padding: 1em 0 1.3em;
+    border-radius: 5px;
+
+    .card-notes {
+        padding: 1em;
+        font-family: 'Poppins', sans-serif;
+    }
+    .card-hour{
+        padding: 0.3em 1em;
+    }
+    blockquote{
+        font-style: italic;
+        color: rgb(94, 93, 93);
+        
+        p::before{
+            content: ".";
+            color: #51ADEF;
+            background-color: #51ADEF;
+            margin-right: 4px;
+        }
+    }
+    th{
+        border: 1px solid #dde0e4;
+        margin: 0;
+        padding: 0.2em 0.3em;
+        font-size: 13pt;
+        font-weight: lighter;
+        background-color: #afc5e2;
+    }
+    tr{
+        margin: 0;
+        text-align: center;
+        border: 1px solid #dde0e4;
+        font-size: 13pt;
+        padding: 0.3em 0.4em;
+    }
+
+    hr{
+        background-color: #dde0e4;
+        margin: 0 0 20px;
+        position: relative;
+        width: 100%;
+    }
+    .ftbtn-container{
+        display: flex;
+    }
+    .ftbtn{
+        padding: 0 2em;
+        border: none;
+        outline: none;
+        background: none;
+        color: #75787a;
+        text-decoration: none;
+        &:hover{
+            color: #505152;
+        }
+    }
+    .danger{
+        color: rgb(245, 85, 45);
+
+        &:hover{
+            color: rgb(240, 49, 49)  
+        }
+    }
+}
+
+
+
+
