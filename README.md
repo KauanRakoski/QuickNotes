@@ -1,16 +1,19 @@
-<h1 align="center">Quick Notes</h1>
+<h1 align="center">NoteDown</h1>
 
-<p align="center"><img src="./assets/notedown.png" width="200" height="194"></p>
+<p align="center"><img src="./assets/notedown.png" width="200" height="194"></p> <br>
+
+<p align="center">
+  <img src="http://hits.dwyl.com/kauanrakoski/sorter.svg">
+</p>
 
 ### 📋 About
-  Quick notes is a simple note taking app buit on top of Node Js. It uses express and express-handlebars to create a dynamic app, and bootstrap for quick styling. Passport js creates a           google Oauth connection. And a mongoDB database is used to store data.
+NoteDown is a simple markdown note taking app buit on top of Node Js. It uses express and express-handlebars to create a dynamic app, and bootstrap for quick styling. Passport js creates a google Oauth connection. And a mongoDB database is used to store data.
 
 ### 🚀 Built with
 - Express
 - Passport JS
 - Mongoose
 - Bootstrap
-
 
 ### 🎯 Goals from now
 - Continuously improve UI and UX
