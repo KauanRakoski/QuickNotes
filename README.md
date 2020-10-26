@@ -1,32 +1,27 @@
 # Quick Notes
 
-## About
+### 📋 About
 Quick notes is a simple note taking app buit on top of Node Js. It uses express and express-handlebars to create a dynamic app, and bootstrap for quick styling. Passport js creates a google Oauth connection. And a mongoDB database is used to store data.
 
-## Modules used
-**The main modules of this project are:**
+### 🚀 Built with
 - Express
-- Body-parser
-- Passport js
-- Express handlebars.
-- Method Override
+- Passport JS
 - Mongoose
-- ...
+- Bootstrap
 
-```javascript
-Node.js back-end.
-```
 
-## Objectives
-- [x] Setup routes and Oauth
-- [x] Create a dynamic layout with add and delete Notes.
-- [x] Quick style.
-- [x] Make notes editable.
-- [x] Create a markdown system.
-- [ ] Improve user options - like oauth possibilities - and UX-UI (currently working on);
-- [ ] Make it a PWA.
+### 🎯 Goals from now
+- Continuously improve UI and UX
+- Recreate the project in Vue, to offer a better experience.
+- Utilize Firebase and its modules to make a fast appliction.
 
-## People who helped me:
+### ♻️ Contributing
+1. Fork this repository
+2. Create a new branch with your feature name: `git checkout -b my-feature`
+3. Work and commit your code: `git commit -m "my-feature or fix"
+4. Push to the forked repository and "compare and pull request"
+
+### People who helped me:
 
 - Traversy media node js video - the inspiration to this app.
 - Vuka video on google Oauth.
